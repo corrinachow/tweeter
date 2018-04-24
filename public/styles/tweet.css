@@ -21,6 +21,7 @@ article.tweet header img {
 article.tweet header div {
   margin: 0;
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: baseline;
 }
@@ -28,11 +29,6 @@ article.tweet header div {
 article.tweet header h2 {
   font-size: 1.6em;
   margin: 0 0.5em;
-}
-
-article.tweet header span.handle {
-  position: relative;
-  left: 35%;
 }
 
 article.tweet p {
