@@ -3,7 +3,7 @@
   border-radius: 5px;
   border: solid 1px;
   margin: 2em;
-  padding: 0.2em 2em;
+  padding: 0.2em 1em;
 }
 
 .new-tweet h2 {
@@ -28,15 +28,3 @@
   margin: 0.2rem 0;
   float: right;
 }
-
-
-/*
-<section class="new-tweet">
-<h2>Compose Tweet</h2>
-<form action="/tweets/" method="post">
-<textarea name="text" placeholder="What are you humming about?"></textarea>
-<input type="submit" value="Tweet">
-<span class="counter">140</span>
-</form>
-</section>
-*/
