@@ -1,8 +1,4 @@
 $(function() {
-
-  // const $header = $(".tweet").find("header");
-  // const $tweetTime = $("article.tweet .date").text();
-
   $("article.tweet").mouseenter(function() {
     const $tweetActions = $(this).find('.tweet-actions');
     const $header = $(this).find('header');
