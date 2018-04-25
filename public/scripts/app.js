@@ -51,7 +51,7 @@ function createTweetElement(tweet) {
   const { name, avatars, handle } = tweet.user;
   const { text } = tweet.content;
 
-  const $tweet = $("<article>").addClass("tweet");
+  const $tweet = $("<article>").addClass("tweet").css('display', 'none');
 
   // Tweet header
   const avatar = $("<img>").attr("src", avatars.regular);
@@ -59,17 +59,17 @@ function createTweetElement(tweet) {
   const $handle = $("<span>")
     .addClass("handle")
     .text(handle);
-  const $header = $("<header>").append(avatar, $("<div>").append($h2, $handle));
+  const $header = $("<header>").css('opacity', '0.8').append(avatar, $("<div>").append($h2, $handle));
 
   // Tweet body
   const $tweetBody = $("<p>").text(text);
 
   // Tweet footer
   const $date = $("<span>").text(moment.utc(tweet.created_at).fromNow());
-  const $tweetActions = `<div class='tweet-actions'>
-  <span class='report'><i class="fab fa-font-awesome-flag"></i></span>
-      <span class='retweet'><i class="fas fa-retweet"></i></span>
-      <span class='like'><i class="fas fa-heart"></i></span>
+  const $tweetActions = `<div class='tweet-actions' style="visibility: hidden">
+  <span class='report'><i title="Report post" class="fab fa-font-awesome-flag"></i></span>
+      <span class='retweet'><i title="Retweet" class="fas fa-retweet"></i></span>
+      <span class='like'><i title="Like post" class="fas fa-heart"></i></span>
     </div>`;
   const $footer = $("<footer>").append($date, $tweetActions);
 
@@ -86,4 +86,22 @@ function renderTweets(tweets) {
 
 $(function() {
   $("#tweets-container").append(renderTweets(data));
+  $(".new-tweet form").submit(function(e) {
+    e.preventDefault();
+    const $tweetData = $(this).serialize();
+    // $('.new-tweet').find('textarea').val('');
+    $.ajax({
+      url: "/tweets",
+      type: "POST",
+      cache: false,
+      data: $tweetData,
+      success: function(d) {
+        console.log(d[d.length-1])
+        console.log(d)
+        $("#tweets-container").prepend(createTweetElement(d[d.length-1]))
+        $('article.tweet').slideDown();
+      }
+    });
+
+  });
 });

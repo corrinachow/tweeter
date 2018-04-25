@@ -2,6 +2,7 @@ article.tweet {
   border: solid 1px;
   border-radius: 5px;
   margin: 2em;
+
 }
 
 article.tweet header {
@@ -17,7 +18,7 @@ article.tweet header {
 article.tweet header img {
   border-radius: 5px;
   height: 70px;
-  width: 70px;
+  width: auto;
 }
 
 article.tweet header div {
@@ -36,6 +37,7 @@ article.tweet header h2 {
 article.tweet p {
   padding: 1em 0.5em;
   font-size: 1.5em;
+  word-wrap: break-word;
 }
 
 article.tweet footer {

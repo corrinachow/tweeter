@@ -1,14 +1,14 @@
 $(function() {
-  $("article.tweet").mouseenter(function() {
+  $('#tweets-container').on('mouseenter', '.tweet' , function() {
     const $tweetActions = $(this).find('.tweet-actions');
     const $header = $(this).find('header');
     $tweetActions.css("visibility", "visible");
-    $header.css("opacity", "1");
+    $header.css("opacity", "1")
   });
-  $("article.tweet").mouseleave(function() {
+  $('#tweets-container').on('mouseleave', '.tweet' , function() {
     const $tweetActions = $(this).find('.tweet-actions');
     const $header = $(this).find('header');
     $tweetActions.css("visibility", "hidden");
-    $header.css("opacity", "0.8");
+    $header.css("opacity", "0.8")
   });
 });
