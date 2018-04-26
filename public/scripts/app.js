@@ -94,9 +94,11 @@ $(function() {
         cache: false,
         data: $tweetData,
         success: function(data) {
-          $(".new-tweet")
+          $("section.new-tweet")
             .find("textarea")
             .val("");
+          $("section.new-tweet").find(".error").slideUp();
+          $("section.new-tweet").find(".counter").text('140')
           $("#tweets-container").prepend(createTweetElement(data[0]));
           $("article.tweet").slideDown();
         }
