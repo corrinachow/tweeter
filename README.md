@@ -34,9 +34,9 @@ Composing a Tweet
 ## Functional Requirements
 
 <ul>
-<li>Primarily a client-side Single Page App (SPA)</li>
-<li>The client-side app communicates with a server via AJAX</li>
-<li>Tweets are persisted to MongoDB and survive server restart</li>
+<li> ✅ Primarily a client-side Single Page App (SPA)</li>
+<li> ✅ The client-side app communicates with a server via AJAX</li>
+<li> ✅ Tweets are persisted to MongoDB and survive server restart</li>
 </ul>
 
 ## Display Requirements
