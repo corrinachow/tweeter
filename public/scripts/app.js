@@ -2,7 +2,9 @@ function createTweetElement(tweet) {
   const { name, avatars, handle } = tweet.user;
   const { text } = tweet.content;
 
-  const $tweet = $("<article>").addClass("tweet").css('display','none');
+  const $tweet = $("<article>")
+    .addClass("tweet")
+    .css("display", "none");
 
   // Tweet header
   const avatar = $("<img>").attr("src", avatars.regular);
@@ -33,7 +35,7 @@ function renderTweets(tweets) {
   for (let tweet of tweets) {
     $("#tweets-container").append(createTweetElement(tweet));
   }
-  $('article.tweet').slideDown();
+  $("article.tweet").slideDown();
 }
 
 function loadTweets() {
@@ -41,7 +43,7 @@ function loadTweets() {
   $.get("/tweets", function(data) {
     tweetData = data;
   }).then(function() {
-    renderTweets(tweetData.reverse());
+    renderTweets(tweetData);
   });
 }
 
@@ -49,7 +51,6 @@ function validateTweet(tweet) {
   let $div = $("<div>")
     .addClass("error")
     .css("display", "none");
-    console.log(tweet)
 
   if (!tweet) {
     const $error = $("<p>").text("Tweets must be more than one character");
@@ -58,18 +59,22 @@ function validateTweet(tweet) {
       $("section.new-tweet").prepend($div);
       $(".error").slideDown();
     } else {
-      $("section.new-tweet").find('.error').html($error);
+      $("section.new-tweet")
+        .find(".error")
+        .html($error);
     }
     return false;
   } else if (tweet.length > 140) {
-    console.log('error')
+    console.log("error");
     const $error = $("<p>").text("The tweet is too long");
     if ($("section.new-tweet").find(".error").length === 0) {
       $div.append($error);
       $("section.new-tweet").prepend($div);
       $(".error").slideDown();
     } else {
-      $("section.new-tweet").find('.error').html($error);
+      $("section.new-tweet")
+        .find(".error")
+        .html($error);
     }
     return false;
   }
@@ -81,6 +86,7 @@ $(function() {
   $(".new-tweet form").submit(function(e) {
     e.preventDefault();
     const $tweetData = $(this).serialize();
+    console.log($tweetData);
     if (validateTweet($tweetData.substr(5))) {
       $.ajax({
         url: "/tweets",
@@ -91,10 +97,8 @@ $(function() {
           $(".new-tweet")
             .find("textarea")
             .val("");
-          $("#tweets-container").prepend(
-            createTweetElement(data[data.length - 1])
-          );
-          $('article.tweet').slideDown();
+          $("#tweets-container").prepend(createTweetElement(data[0]));
+          $("article.tweet").slideDown();
         }
       });
     }
