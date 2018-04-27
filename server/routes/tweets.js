@@ -4,8 +4,14 @@ const userHelper = require("../lib/util/user-helper");
 
 const express = require("express");
 const tweetsRoutes = express.Router();
-
 module.exports = function(DataHelpers) {
+
+/**
+ * ------------------------------------------------------------------------
+ * GETS EXISTING TWEETS
+ * ------------------------------------------------------------------------
+ */
+
   tweetsRoutes.get("/", function(req, res) {
     DataHelpers.getTweets((err, tweets) => {
       if (err) {
@@ -15,6 +21,12 @@ module.exports = function(DataHelpers) {
       }
     });
   });
+
+/**
+ * ------------------------------------------------------------------------
+ * HANDLES TWEET SUBMISSION
+ * ------------------------------------------------------------------------
+ */
 
   tweetsRoutes.post("/", function(req, res) {
     if (!req.body.text) {
@@ -43,16 +55,20 @@ module.exports = function(DataHelpers) {
     });
   });
 
-  tweetsRoutes.post("/tweets/:id", function(req, res) {
+/**
+ * ------------------------------------------------------------------------
+ * HANDLES LIKES
+ * ------------------------------------------------------------------------
+ */
+
+  tweetsRoutes.post("/:id", function(req, res) {
     console.log(req.params.id);
-    console.log('In index.js')
-    DataHelpers.likeTweet(req.params.id, err => {
+    DataHelpers.likeTweet(req.params.id, (err, data) => {
+      console.log(data)
       if (err) {
-        console.log(err)
         res.status(500).json({error: err.message});
       } else {
-
-        res.status(201).redirect('/tweets');
+        res.status(201).send(data);
       }
     })
 

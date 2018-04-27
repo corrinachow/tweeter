@@ -28,9 +28,6 @@ MongoClient.connect(MONGODB_URI, (err, db) => {
 
   app.use("/tweets", tweetsRoutes);
 
-  // Liking Tweets
-  app.post('/tweets/:id', tweetsRoutes);
-
 
 });
 
