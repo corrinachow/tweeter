@@ -47,7 +47,12 @@ function createTweetElement(tweet) {
     "fas fa-retweet",
     "Retweet post"
   );
-  const $like = createIconElement("span", "like", "fas fa-heart", "Like post");
+
+  const $like = $("<span>").addClass('like').append($("<i>").attr('title', 'Like post').addClass('fas fa-heart'))
+
+  if (tweet.like) {
+    $like.css("color", "rgb(255, 0, 0)");
+  }
   const $likes = $('<span>').addClass('likes').text(tweet.likes);
 
   const $tweetActions = $('<div>').addClass("tweet-actions")

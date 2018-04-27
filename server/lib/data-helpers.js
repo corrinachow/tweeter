@@ -26,48 +26,44 @@ module.exports = function makeDataHelpers(db) {
     },
 
     handleLike: function(tweetID, callback) {
-      console.log("inside handleLike");
-      console.log(`About to search for ${tweetID}`);
-
-      // 0 is false, 1 is true
-      // if check
       db
         .collection("tweets")
         .find({ _id: ObjectId(tweetID) })
         .toArray()
         .then(tweetEntry => {
           console.log(tweetEntry[0].like);
-
           // if like === 1 (true)
-          if (tweetEntry[0].like) {
-            db
-              .collection("tweets")
-              .update(
-                { _id: ObjectId(tweetID) },
+          if (tweetEntry[0].like ) {
+            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            console.log("tweet being UNLIKED");
+            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            db.collection("tweets").update(
+              { _id: ObjectId(tweetID) },
 
-                // Set like == 0 (false)
-                { $set : { like: 0 }, $inc: { likes: -1 }}
-
-              );
+              // Set like == 0 (false) and dec. likes by 1
+              {
+                $set: { like: 0 },
+                $inc: { likes: -1 }
+              },
+            );
           } else {
-            console.log("inside else");
-            db
-              .collection("tweets")
-              .update(
-                { _id: ObjectId(tweetID) },
+            console.log("tweet being LIKED");
+            db.collection("tweets").update(
+              { _id: ObjectId(tweetID) },
 
-                // Set like == 1 (true)
-                { $set : { like: 1 }, $inc: { likes: 1 }}
-
-              );
+              // Set like == 1 (true) and inc. likes by 1
+              {
+                $set: { like: 1 },
+                $inc: { likes: 1 }
+              }
+            );
           }
-        });
-
-          db
-            .collection("tweets")
-            .find({ _id: ObjectId(tweetID) }, { likes: 1 })
-            .toArray(callback)
-
+        }).then(
+        db
+        .collection("tweets")
+        .find({ _id: ObjectId(tweetID) }, { likes: 1 })
+        .toArray(callback)
+        )
     }
   };
 };
