@@ -5,26 +5,20 @@
   margin: 2em;
   padding: 0.2em 1em;
 }
-
 .new-tweet h2 {
   border-bottom: solid 1px;
 }
-
-.new-tweet form {
-}
-
 .new-tweet textarea {
-  width: 100%;
-  display: block;
+  width: calc(100% - 1em);
   padding: 0.5em;
 }
-
 .new-tweet input {
   margin: 0.2rem 0;
   width: 75px;
 }
-
 .new-tweet .counter {
   margin: 0.2rem 0;
   float: right;
 }
+
+/*# sourceMappingURL=new-tweet.css.map */
