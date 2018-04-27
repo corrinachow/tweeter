@@ -63,9 +63,7 @@ module.exports = function(DataHelpers) {
  */
 
   tweetsRoutes.post("/:id", function(req, res) {
-    console.log(req.params.id);
     DataHelpers.handleLike(req.params.id, (err, data) => {
-      console.log(data)
       if (err) {
         res.status(500).json({error: err.message});
       } else {

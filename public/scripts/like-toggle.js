@@ -13,7 +13,6 @@ $(function() {
 
     const currentLikes = Number(
       $(this)
-        .parent()
         .siblings(".likes")
         .text()
     );
@@ -21,13 +20,11 @@ $(function() {
     if ($(this).css("color") === "rgb(255, 0, 0)") {
       $(this).css("color", "rgb(36, 71, 81)");
       $(this)
-        .parent()
         .siblings(".likes")
         .text(currentLikes - 1);
     } else {
       $(this).css("color", "rgb(255, 0, 0)");
       $(this)
-        .parent()
         .siblings(".likes")
         .text(currentLikes + 1);
     }
