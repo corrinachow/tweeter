@@ -25,21 +25,49 @@ module.exports = function makeDataHelpers(db) {
       });
     },
 
-    // Liking Tweets
-    likeTweet: function(tweetID, callback) {
-      console.log("inside likeTweet");
+    handleLike: function(tweetID, callback) {
+      console.log("inside handleLike");
       console.log(`About to search for ${tweetID}`);
+
+      // 0 is false, 1 is true
+      // if check
       db
         .collection("tweets")
-        .update(
-          { _id: ObjectId(tweetID) },
-          { $inc: { likes: 1 } },
-          { like: true }
-        );
-      db
-        .collection("tweets")
-        .find({ _id: ObjectId(tweetID) }, { likes: 1 })
-        .toArray(callback);
+        .find({ _id: ObjectId(tweetID) })
+        .toArray()
+        .then(tweetEntry => {
+          console.log(tweetEntry[0].like);
+
+          // if like === 1 (true)
+          if (tweetEntry[0].like) {
+            db
+              .collection("tweets")
+              .update(
+                { _id: ObjectId(tweetID) },
+
+                // Set like == 0 (false)
+                { $set : { like: 0 }, $inc: { likes: -1 }}
+
+              );
+          } else {
+            console.log("inside else");
+            db
+              .collection("tweets")
+              .update(
+                { _id: ObjectId(tweetID) },
+
+                // Set like == 1 (true)
+                { $set : { like: 1 }, $inc: { likes: 1 }}
+
+              );
+          }
+        });
+
+          db
+            .collection("tweets")
+            .find({ _id: ObjectId(tweetID) }, { likes: 1 })
+            .toArray(callback)
+
     }
   };
 };

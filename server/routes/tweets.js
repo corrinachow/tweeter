@@ -44,7 +44,8 @@ module.exports = function(DataHelpers) {
         text: req.body.text
       },
       created_at: Date.now(),
-      likes: 0
+      likes: 0,
+      like: false
     };
     DataHelpers.saveTweet(tweet, err => {
       if (err) {
@@ -63,7 +64,7 @@ module.exports = function(DataHelpers) {
 
   tweetsRoutes.post("/:id", function(req, res) {
     console.log(req.params.id);
-    DataHelpers.likeTweet(req.params.id, (err, data) => {
+    DataHelpers.handleLike(req.params.id, (err, data) => {
       console.log(data)
       if (err) {
         res.status(500).json({error: err.message});
