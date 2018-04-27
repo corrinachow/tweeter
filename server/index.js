@@ -25,8 +25,15 @@ MongoClient.connect(MONGODB_URI, (err, db) => {
   // Passes DB response to create Data Helpers
   const DataHelpers = require("./lib/data-helpers.js")(db);
   const tweetsRoutes = require("./routes/tweets")(DataHelpers);
+
   app.use("/tweets", tweetsRoutes);
+
+  // Liking Tweets
+  app.post('/tweets/:id', tweetsRoutes);
+
+
 });
+
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
