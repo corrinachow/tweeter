@@ -44,7 +44,7 @@
 .tweet footer .tweet-actions {
   visibility: hidden;
 }
-.tweet footer .tweet-actions span {
+.tweet footer .tweet-actions i {
   padding: 0 0.2em;
 }
 
