@@ -31,10 +31,8 @@ module.exports = function makeDataHelpers(db) {
         .find({ _id: ObjectId(tweetID) })
         .toArray()
         .then(tweetEntry => {
-
           // if like === 1 (true)
           if (tweetEntry[0].like) {
-
             db.collection("tweets").update(
               { _id: ObjectId(tweetID) },
 
@@ -45,7 +43,6 @@ module.exports = function makeDataHelpers(db) {
               }
             );
           } else {
-
             db.collection("tweets").update(
               { _id: ObjectId(tweetID) },
 
