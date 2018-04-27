@@ -117,7 +117,7 @@ Composing a Tweet
 <h4>Stretch</h4>
 
 <ul>
-<li><p>When a user clicks a tweet's "Like" button, the "Like" count is updated</p></li>
+<li><p> ✅ When a user clicks a tweet's "Like" button, the "Like" count is updated</p></li>
 <li><p>Only logged-in users may "like" tweets, and they may not "like" their own tweets</p></li>
 </ul>
 </div>
