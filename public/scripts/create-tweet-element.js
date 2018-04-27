@@ -48,10 +48,12 @@ function createTweetElement(tweet) {
     "Retweet post"
   );
   const $like = createIconElement("span", "like", "fas fa-heart", "Like post");
+  const $likes = $('<span>').addClass('likes').text(tweet.likes);
+
   const $tweetActions = $('<div>').addClass("tweet-actions")
     .css("visibility", "hidden")
     .append($report, $retweet, $like);
-  const $footer = $("<footer>").append($date, $tweetActions);
+  const $footer = $("<footer>").append($date, $tweetActions, $likes);
   return $tweet.append($header, $tweetBody, $footer);
 }
 
