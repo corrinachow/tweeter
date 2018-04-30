@@ -76,40 +76,32 @@ module.exports = function(DataHelpers) {
 
   tweetsRoutes.post("/register", function(req, res) {
     const { email, password } = req.body;
-    console.log(email, password);
 
-    // Checks for email and password
-    if (!email || !password) {
-      return res.status(400).send("<h1>Invalid email or password</h1>");
+    DataHelpers.getUser(email, (err, data) => {
+      console.log(data)
+      if (data.length === 0) {
+        const userSchema = {
+          id: generateRandomStr(),
+          email: email,
+          password: bcrypt.hashSync(password, 10)
+        };
+        // console.log(userSchema);
 
-      // Checks if email is already used in database
-      // } else if (DataHelpers.getUser(email)) {
-      //   return res.status(400).send("<h1>Email already in use</h1>");
-
-      //   // Checks for a valid email
-      // } else if (!validateEmail(email)) {
-      //   return res.status(400).send("<h1>Please enter a valid email</h1>");
-
-      // Populates new user schema
-    } else {
-      const userSchema = {
-        id: generateRandomStr(),
-        email: email,
-        password: bcrypt.hashSync(password, 10)
-      };
-      console.log(userSchema);
-
-      DataHelpers.userRegistration(userSchema, (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.send(err);
-        } else {
-          req.session.user_id = userSchema.id;
-        }
+        DataHelpers.userRegistration(userSchema, (err, data) => {
+          console.log(data);
+          if (err) {
+            console.log(err);
+            return res.send(err);
+          } else {
+            req.session.user_id = userSchema.id;
+          }
+          res.status(201).redirect("/");
       });
-    }
-    res.status(201).redirect("/");
+       } else if (data[0].email === email) {
+        return res.send("Email already in use");
+      }
   });
+  })
 
   /**
    * ------------------------------------------------------------------------
@@ -119,12 +111,12 @@ module.exports = function(DataHelpers) {
 
   tweetsRoutes.post("/login", function(req, res) {
     const { email, password } = req.body;
-    console.log(email,password)
 
     DataHelpers.getUser(email, (err, data) => {
       if (err) {
         return res.send(err);
       } else {
+        console.log(data);
         if (bcrypt.compareSync(password, data[0].password)) {
           req.session.user_id = data[0].id;
           return res.status(201).redirect("/");

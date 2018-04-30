@@ -68,12 +68,13 @@ module.exports = function makeDataHelpers(db) {
      * ------------------------------------------------------------------------
      */
 
-
     getUser: function(email, callback) {
       console.log("GETTING USER");
+      // Must get email first
       db
         .collection("users")
-        .find({ email: email },{ password: 1 }).toArray(callback)
+        .find({ email: email })
+        .toArray(callback)
     },
 
     // // Adds user to database
