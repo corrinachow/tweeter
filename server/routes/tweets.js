@@ -113,28 +113,40 @@ module.exports = function(DataHelpers) {
 
   /**
    * ------------------------------------------------------------------------
-   * USER LOGIN
+   * LOGIN FORM
    * ------------------------------------------------------------------------
    */
 
-   tweetsRoutes.post("/register", function(req, res) {
+  tweetsRoutes.post("/login", function(req, res) {
+    const { email, password } = req.body;
+    console.log(email,password)
 
-   });
+    DataHelpers.getUser(email, (err, data) => {
+      if (err) {
+        return res.send(err);
+      } else {
+        if (bcrypt.compareSync(password, data[0].password)) {
+          req.session.user_id = data[0].id;
+          return res.status(201).redirect("/");
+        }
+      }
+    });
+  });
 
-   /**
+  /**
    * ------------------------------------------------------------------------
    * USER LOGOUT
    * ------------------------------------------------------------------------
    */
 
-   tweetsRoutes.post("/logout", (req, res) => {
+  tweetsRoutes.post("/logout", (req, res) => {
     req.session = null;
     return res.redirect("/");
   });
 
   /**
    * ------------------------------------------------------------------------
-   * HANDLES LIKES
+   * HANDLE LIKES
    * Must put after /register and /login
    * ------------------------------------------------------------------------
    */

@@ -1,6 +1,7 @@
 $(function() {
   $("#register").on("click", registerForm);
   $("#login").on("click", loginForm);
+  $("#logout").on("click", logoutForm);
 
   function registerForm(e) {
     e.preventDefault();
@@ -19,13 +20,18 @@ $(function() {
       ".container"
     ).prepend(`<h2>Login form</h2><form method="POST" action="/tweets/login">
   <label for="email">email</label>
-  <input type='email' id="email" name="email" value="example@example.com">
+  <input type='email' id="email" name="email" value="hello@example.com">
 
   <label for="pword">password</label>
   <input type='
-  password' id="pword" name="password" value="tests">
+  password' id="pword" name="password" value="password">
 
   <input type='submit' value="login">
 </form>`);
+  }
+
+  function logoutForm(e) {
+    e.preventDefault();
+    $.post("/tweets/logout");
   }
 });

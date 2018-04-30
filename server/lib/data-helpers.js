@@ -68,17 +68,18 @@ module.exports = function makeDataHelpers(db) {
      * ------------------------------------------------------------------------
      */
 
+
     getUser: function(email, callback) {
       console.log("GETTING USER");
       db
-        .collection("tweets")
-        .find()
-        .toArray(callback);
+        .collection("users")
+        .find({ email: email },{ password: 1 }).toArray(callback)
     },
 
     // // Adds user to database
     userRegistration: function(userSchema, callback) {
+      console.log("INSIDE USER REGISTRATION");
       db.collection("users").insert(userSchema, callback);
     }
-  }
+  };
 };
