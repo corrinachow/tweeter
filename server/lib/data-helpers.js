@@ -60,6 +60,25 @@ module.exports = function makeDataHelpers(db) {
             .find({ _id: ObjectId(tweetID) }, { likes: 1 })
             .toArray(callback)
         );
+    },
+
+    /**
+     * ------------------------------------------------------------------------
+     * USER REGISTRATION
+     * ------------------------------------------------------------------------
+     */
+
+    getUser: function(email, callback) {
+      console.log("GETTING USER");
+      db
+        .collection("tweets")
+        .find()
+        .toArray(callback);
+    },
+
+    // // Adds user to database
+    userRegistration: function(userSchema, callback) {
+      db.collection("users").insert(userSchema, callback);
     }
-  };
+  }
 };

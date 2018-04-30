@@ -4,13 +4,14 @@ const userHelper = require("../lib/util/user-helper");
 
 const express = require("express");
 const tweetsRoutes = express.Router();
-module.exports = function(DataHelpers) {
+const bcrypt = require("bcrypt");
 
-/**
- * ------------------------------------------------------------------------
- * GETS EXISTING TWEETS
- * ------------------------------------------------------------------------
- */
+module.exports = function(DataHelpers) {
+  /**
+   * ------------------------------------------------------------------------
+   * GETS EXISTING TWEETS
+   * ------------------------------------------------------------------------
+   */
 
   tweetsRoutes.get("/", function(req, res) {
     DataHelpers.getTweets((err, tweets) => {
@@ -22,11 +23,11 @@ module.exports = function(DataHelpers) {
     });
   });
 
-/**
- * ------------------------------------------------------------------------
- * HANDLES TWEET SUBMISSION
- * ------------------------------------------------------------------------
- */
+  /**
+   * ------------------------------------------------------------------------
+   * HANDLES TWEET SUBMISSION
+   * ------------------------------------------------------------------------
+   */
 
   tweetsRoutes.post("/", function(req, res) {
     if (!req.body.text) {
@@ -56,22 +57,91 @@ module.exports = function(DataHelpers) {
     });
   });
 
-/**
- * ------------------------------------------------------------------------
- * HANDLES LIKES
- * ------------------------------------------------------------------------
- */
+  /**
+   * ------------------------------------------------------------------------
+   * USER REGISTRATION
+   * ------------------------------------------------------------------------
+   */
+
+  function generateRandomStr() {
+    return Math.random()
+      .toString(36)
+      .substring(6);
+  }
+
+  function validateEmail(email) {
+    const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    return re.test(email.toLowerCase());
+  }
+
+  tweetsRoutes.post("/register", function(req, res) {
+
+    const { email, password } = req.body;
+    console.log(email, password);
+
+    // Checks for email and password
+    if (!email || !password) {
+      return res.status(400).send("<h1>Invalid email or password</h1>");
+
+      // Checks if email is already used in database
+    // } else if (DataHelpers.getUser(email)) {
+    //   return res.status(400).send("<h1>Email already in use</h1>");
+
+    //   // Checks for a valid email
+    // } else if (!validateEmail(email)) {
+    //   return res.status(400).send("<h1>Please enter a valid email</h1>");
+
+    // Populates new user schema
+    } else {
+      const userSchema = {
+        id: generateRandomStr(),
+        email: email,
+        password: bcrypt.hashSync(password, 10)
+      }
+      console.log(userSchema);
+
+      DataHelpers.userRegistration(userSchema, (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.send(err);
+        } else {
+          req.session.user_id = userSchema.id;
+        }
+      });
+
+    };
+
+
+    //   DataHelpers.userRegistration(userSchema, (err, data) => {
+    //     if (err) {
+    //       console.log(err);
+    //       return res.status(500);
+    //     }
+    //     // Sets cookie
+    //     // req.session.user_id = newUser.id;
+
+    //     return res.redirect("/tweets");
+    //   });
+    // }
+    res.status(201).redirect("/");
+  });
+
+  /**
+   * ------------------------------------------------------------------------
+   * HANDLES LIKES
+   * Must put after /register and /login
+   * ------------------------------------------------------------------------
+   */
 
   tweetsRoutes.post("/:id", function(req, res) {
     DataHelpers.handleLike(req.params.id, (err, data) => {
       if (err) {
-        res.status(500).json({error: err.message});
+        res.status(500).json({ error: err.message });
       } else {
         res.status(201).send(data);
       }
-    })
-
-  })
+    });
+  });
 
   return tweetsRoutes;
 };
