@@ -33,6 +33,8 @@ module.exports = function(DataHelpers) {
     if (!req.body.text) {
       res.status(400).json({ error: "invalid request: no data in POST body" });
       return;
+    } else if (!req.session.user_id) {
+      return res.status(400).send("Must be logged in to make a Tweet");
     }
 
     const user = req.body.user
@@ -50,9 +52,9 @@ module.exports = function(DataHelpers) {
     };
     DataHelpers.saveTweet(tweet, err => {
       if (err) {
-        res.status(500).json({ error: err.message });
+        return res.status(500).json({ error: err.message });
       } else {
-        res.status(201).redirect("/tweets");
+        return res.status(201).redirect("/tweets");
       }
     });
   });
@@ -78,30 +80,30 @@ module.exports = function(DataHelpers) {
     const { email, password } = req.body;
 
     DataHelpers.getUser(email, (err, data) => {
-      console.log(data)
+      // If no matches are found, continue with registration
       if (data.length === 0) {
         const userSchema = {
           id: generateRandomStr(),
           email: email,
           password: bcrypt.hashSync(password, 10)
         };
-        // console.log(userSchema);
 
+        // Adds userSchema to database
         DataHelpers.userRegistration(userSchema, (err, data) => {
-          console.log(data);
           if (err) {
-            console.log(err);
             return res.send(err);
           } else {
+            // Sets cookie for session
             req.session.user_id = userSchema.id;
           }
-          res.status(201).redirect("/");
-      });
-       } else if (data[0].email === email) {
+          return res.status(201).redirect("/");
+        });
+        // Throws error for using existing email
+      } else if (data[0].email === email) {
         return res.send("Email already in use");
       }
+    });
   });
-  })
 
   /**
    * ------------------------------------------------------------------------
@@ -112,11 +114,12 @@ module.exports = function(DataHelpers) {
   tweetsRoutes.post("/login", function(req, res) {
     const { email, password } = req.body;
 
+    // Retrieves user from database
     DataHelpers.getUser(email, (err, data) => {
       if (err) {
         return res.send(err);
       } else {
-        console.log(data);
+        // If password matches, sets cookie
         if (bcrypt.compareSync(password, data[0].password)) {
           req.session.user_id = data[0].id;
           return res.status(201).redirect("/");
