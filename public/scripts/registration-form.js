@@ -17,7 +17,7 @@ $(function() {
     e.preventDefault();
     $(
       ".container"
-    ).prepend(`<h2>Login form</h2><form method="POST" action="/login">
+    ).prepend(`<h2>Login form</h2><form method="POST" action="/tweets/login">
   <label for="email">email</label>
   <input type='email' id="email" name="email" value="example@example.com">
 

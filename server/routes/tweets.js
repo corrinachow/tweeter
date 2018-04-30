@@ -75,7 +75,6 @@ module.exports = function(DataHelpers) {
   }
 
   tweetsRoutes.post("/register", function(req, res) {
-
     const { email, password } = req.body;
     console.log(email, password);
 
@@ -84,20 +83,20 @@ module.exports = function(DataHelpers) {
       return res.status(400).send("<h1>Invalid email or password</h1>");
 
       // Checks if email is already used in database
-    // } else if (DataHelpers.getUser(email)) {
-    //   return res.status(400).send("<h1>Email already in use</h1>");
+      // } else if (DataHelpers.getUser(email)) {
+      //   return res.status(400).send("<h1>Email already in use</h1>");
 
-    //   // Checks for a valid email
-    // } else if (!validateEmail(email)) {
-    //   return res.status(400).send("<h1>Please enter a valid email</h1>");
+      //   // Checks for a valid email
+      // } else if (!validateEmail(email)) {
+      //   return res.status(400).send("<h1>Please enter a valid email</h1>");
 
-    // Populates new user schema
+      // Populates new user schema
     } else {
       const userSchema = {
         id: generateRandomStr(),
         email: email,
         password: bcrypt.hashSync(password, 10)
-      }
+      };
       console.log(userSchema);
 
       DataHelpers.userRegistration(userSchema, (err, data) => {
@@ -108,22 +107,29 @@ module.exports = function(DataHelpers) {
           req.session.user_id = userSchema.id;
         }
       });
-
-    };
-
-
-    //   DataHelpers.userRegistration(userSchema, (err, data) => {
-    //     if (err) {
-    //       console.log(err);
-    //       return res.status(500);
-    //     }
-    //     // Sets cookie
-    //     // req.session.user_id = newUser.id;
-
-    //     return res.redirect("/tweets");
-    //   });
-    // }
+    }
     res.status(201).redirect("/");
+  });
+
+  /**
+   * ------------------------------------------------------------------------
+   * USER LOGIN
+   * ------------------------------------------------------------------------
+   */
+
+   tweetsRoutes.post("/register", function(req, res) {
+
+   });
+
+   /**
+   * ------------------------------------------------------------------------
+   * USER LOGOUT
+   * ------------------------------------------------------------------------
+   */
+
+   tweetsRoutes.post("/logout", (req, res) => {
+    req.session = null;
+    return res.redirect("/");
   });
 
   /**
